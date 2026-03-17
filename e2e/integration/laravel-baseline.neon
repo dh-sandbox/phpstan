@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Variable \$command might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: repo/src/Illuminate/Database/Console/DbCommand.php
+
+		-
 			message: '#^Variable \$action on left side of \?\? always exists and is not nullable\.$#'
 			identifier: nullCoalesce.variable
 			count: 1
