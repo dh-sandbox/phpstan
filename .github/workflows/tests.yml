@@ -74,3 +74,4 @@ jobs:
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: e2e/coverage.xml
+          format: clover
