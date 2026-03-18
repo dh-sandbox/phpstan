@@ -54,7 +54,7 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # v2
         with:
-          coverage: "none"
+          coverage: "${{ matrix.php-version == '8.4' && matrix.operating-system == 'ubuntu-latest' && 'pcov' || 'none' }}"
           php-version: "${{ matrix.php-version }}"
           ini-file: development
           extensions: mbstring
@@ -66,4 +66,11 @@ jobs:
           cd e2e
           composer install --ignore-platform-reqs
           # php testPharAutoloader.php
-          vendor/bin/phpunit PharTest.php
+          vendor/bin/phpunit PharTest.php ${{ matrix.php-version == '8.4' && matrix.operating-system == 'ubuntu-latest' && '--coverage-clover=coverage.xml' || '' }}
+
+      - name: "Upload coverage to Qlty"
+        if: matrix.php-version == '8.4' && matrix.operating-system == 'ubuntu-latest'
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: e2e/coverage.xml
