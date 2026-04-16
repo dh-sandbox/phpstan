@@ -1,0 +1,120 @@
+# This configuration was generated with the setup-qlty-toml skill.
+# For reference: https://docs.qlty.sh/qlty-toml
+config_version = "0"
+
+exclude_patterns = [
+  "*_min.*",
+  "*-min.*",
+  "*.min.*",
+  "**/.yarn/**",
+  "**/*.d.ts",
+  "**/bower_components/**",
+  "**/build/**",
+  "**/deps/**",
+  "**/dist/**",
+  "**/extern/**",
+  "**/external/**",
+  "**/generated/**",
+  "**/Godeps/**",
+  "**/node_modules/**",
+  "**/protos/**",
+  "**/target/**",
+  "**/vendor/**",
+  "**/e2e/**",
+]
+
+test_patterns = [
+  "**/test/**",
+  "**/spec/**",
+  "**/*.test.*",
+  "**/*.spec.*",
+  "**/*_test.*",
+  "**/*_spec.*",
+  "**/test_*.*",
+  "**/spec_*.*",
+]
+
+[smells]
+mode = "comment"
+
+# REQUIRED — points to the built-in Qlty plugin registry. Do not omit this block.
+[[source]]
+name = "default"
+default = true
+
+# PHP static analysis — multiple phpstan.neon configs across subprojects
+[[plugin]]
+name = "phpstan"
+mode = "comment"
+
+# PHP style linting
+[[plugin]]
+name = "php-codesniffer"
+mode = "comment"
+
+# TypeScript linting — website/ subproject
+[[plugin]]
+name = "eslint"
+prefix = "website"
+config_files = ["website/.eslintrc.js"]
+extra_packages = [
+  "@typescript-eslint/parser@6.7.5",
+  "@typescript-eslint/eslint-plugin@6.7.5",
+]
+mode = "comment"
+
+# TypeScript linting — playground-api/ subproject
+[[plugin]]
+name = "eslint"
+prefix = "playground-api"
+config_files = ["playground-api/.eslintrc.js"]
+extra_packages = [
+  "@typescript-eslint/parser@6.7.5",
+  "@typescript-eslint/eslint-plugin@6.7.5",
+]
+mode = "comment"
+
+# Dockerfile linting — docker/ directory
+[[plugin]]
+name = "hadolint"
+config_files = [".qlty/configs/.hadolint.yaml"]
+mode = "comment"
+
+# GitHub Actions workflow linting
+[[plugin]]
+name = "actionlint"
+mode = "comment"
+
+# GitHub Actions security scanner
+[[plugin]]
+name = "zizmor"
+mode = "block"
+
+# Markdown linting
+[[plugin]]
+name = "markdownlint"
+mode = "comment"
+
+# YAML linting
+[[plugin]]
+name = "yamllint"
+mode = "comment"
+
+# Secrets detection — high signal, always block
+[[plugin]]
+name = "trufflehog"
+mode = "block"
+
+# Dependency vulnerability scanning — lockfiles present (composer.lock, package-lock.json)
+[[plugin]]
+name = "osv-scanner"
+mode = "block"
+
+# Container/IaC security scanning — Dockerfiles present
+[[plugin]]
+name = "trivy"
+mode = "block"
+drivers = [
+  "config",
+  "vuln",
+]
